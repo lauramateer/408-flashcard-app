@@ -29,40 +29,27 @@
       </div>
     </div>
     <button id="clear" class="clear btn">
-      <i class="fas fa-trash"></i> Clear Cards
+     Clear Cards
+    </button>
+    <button id="show" class="btn">
+      <i class="fas fa-plus"></i> Add New Card
     </button>
 
     <h1>
       Flash Cards
-      <button id="show" class="btn btn-small">
-        <i class="fas fa-plus"></i> Add New Card
-      </button>
     </h1>
 
-    <div id="cards-container" class="cards">
-      <!-- <div class="card active">
-        <div class="inner-card">
-          <div class="inner-card-front">
-            <p>What is PHP?</p>
-          </div>
-          <div class="inner-card-back">
-            <p>A programming language</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="inner-card">
-          <div class="inner-card-front">
-            <p>What is PHP?</p>
-          </div>
-          <div class="inner-card-back">
-            <p>A programming language</p>
-          </div>
-        </div>
-      </div>
-      -->
+    <div class="form-group">
+      <label for="question">Term/Question</label>
+      <textarea id="question" placeholder="Type here..."></textarea>
     </div>
+
+    <div class="form-group">
+      <label for="answer">Definition/Answer</label>
+      <textarea id="answer" placeholder="Type here..."></textarea>
+    </div>
+
+   
 
     <div class="navigation">
       <button id="prev" class="nav-button">
@@ -75,6 +62,9 @@
         <i class="fas fa-arrow-right"></i>
       </button>
     </div>
+    <button id="check-match" class="btn">
+      Check Match
+     </button>
 
     <div id="add-container" class="add-container">
       <h1>
@@ -84,15 +74,9 @@
         </button>
       </h1>
 
-      <div class="form-group">
-        <label for="question">Question</label>
-        <textarea id="question" placeholder="Enter question..."></textarea>
-      </div>
+     
 
-      <div class="form-group">
-        <label for="answer">Answer</label>
-        <textarea id="answer" placeholder="Enter Answer..."></textarea>
-      </div>
+    
 
       <button id="add-card" class="btn">
         <i class="fas fa-plus"></i> Add Card
