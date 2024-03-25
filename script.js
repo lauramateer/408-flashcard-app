@@ -1,6 +1,12 @@
-const cardsContainer = document.getElementById("cards-container");
+
+var score = 0;
+
+
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
+const checkBtn = document.getElementById("check-match");
+
+
 const currentEl = document.getElementById("current");
 const showBtn = document.getElementById("show");
 const hideBtn = document.getElementById("hide");
@@ -10,29 +16,73 @@ const addCardBtn = document.getElementById("add-card");
 const clearBtn = document.getElementById("clear");
 const addContainer = document.getElementById("add-container");
 
+
+function generate(index){
+
+  document.getElementById( "question" ).innerHTML = cardsData[index].question;
+  document.getElementById( "answer" ).innerHTML = cardsData[index].answer;
+}
+
+
 // Keep track of current card
 let currentActiveCard = 0;
 
 // Store DOM cards
-const cardsEl = [];
+
 
 // Store card data
-const cardsData = getCardsData();
+//const cardsData = getCardsData();
+const cardsEl = [];
+const cardsData = [
+  {
+  question: "What must a variable begin with?",
+   answer: "A letter, $ or _",
+  },
+  {
+   question: "What is a variable?",
+   answer: "Container for a piece of data",
+  },
+  {
+   question: "Example of Case Sensitive Variable",
+   answer: "thisIsAVariable",
+  },
+  ];
 
-//const cardsData = [
-//{
-//question: "What must a variable begin with?",
-// answer: "A letter, $ or _",
-//},
-//{
-// question: "What is a variable?",
-//  answer: "Container for a piece of data",
-//},
-//{
-// question: "Example of Case Sensitive Variable",
-// answer: "thisIsAVariable",
-//},
-//];
+nextBtn.addEventListener("click", () => {
+  currentActiveCard++;
+  if (currentActiveCard >= cardsData.length) {
+    currentActiveCard = 0; // Loop back to the first card
+  }
+  generate(currentActiveCard);
+});
+
+checkBtn.addEventListener("click", () => {
+  console.log("you clicked the check button")
+  const userAnswer = document.getElementById("answerInput").value;
+  const activeQuestion = document.getElementById("question").value;
+
+  //check if answer in bottom box matches answer in array connected to the top box
+
+  for( var i = 0; i < cardsData.length; i++){
+
+    if(activeQuestion === cardsData[i].question)
+    {
+      if (userAnswer === cardsData[i].answer) {
+        console.log("Correct answer!");
+        score++;
+        console.log("The score is now " + score);
+      
+      } 
+
+    }
+    
+  }
+
+  });
+
+
+
+
 
 // Create all cards
 function createCards() {
@@ -60,12 +110,12 @@ function createCard(data, index) {
       </div>
   `;
 
-  card.addEventListener("click", () => card.classList.toggle("show-answer"));
+
 
   // Add to DOM cards
   cardsEl.push(card);
 
-  cardsContainer.appendChild(card);
+ 
 
   updateCurrentText();
 }
@@ -89,22 +139,7 @@ function setCardsData(cards) {
 
 createCards();
 
-// Event listeners
 
-// Next button
-nextBtn.addEventListener("click", () => {
-  cardsEl[currentActiveCard].className = "card left";
-
-  currentActiveCard = currentActiveCard + 1;
-
-  if (currentActiveCard > cardsEl.length - 1) {
-    currentActiveCard = cardsEl.length - 1;
-  }
-
-  cardsEl[currentActiveCard].className = "card active";
-
-  updateCurrentText();
-});
 
 // Previous button
 prevBtn.addEventListener("click", () => {
@@ -151,6 +186,5 @@ addCardBtn.addEventListener("click", () => {
 clearBtn.addEventListener("click", () => {
   localStorage.clear();
 
-  cardsContainer.innerHTML = "";
   window.location.reload();
 });
