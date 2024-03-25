@@ -17,15 +17,17 @@ const clearBtn = document.getElementById("clear");
 const addContainer = document.getElementById("add-container");
 
 
+// Keep track of current card
+let currentActiveCard = 0;
+
+
 function generate(index){
 
-  document.getElementById( "question" ).innerHTML = cardsData[index].question;
-  document.getElementById( "answer" ).innerHTML = cardsData[index].answer;
+
+  document.getElementById( "answerInput" ).innerHTML = cardsData[index].answer;
 }
 
 
-// Keep track of current card
-let currentActiveCard = 0;
 
 // Store DOM cards
 
@@ -56,6 +58,17 @@ nextBtn.addEventListener("click", () => {
   generate(currentActiveCard);
 });
 
+prevBtn.addEventListener("click", () => {
+  currentActiveCard--;
+  console.log("index is " + currentActiveCard);
+
+  if (currentActiveCard < 0) {
+    currentActiveCard = cardsData.length -1; // Loop back to the first card
+  }
+  console.log("index being generated is" + currentActiveCard);
+  generate(currentActiveCard);
+});
+
 checkBtn.addEventListener("click", () => {
   console.log("you clicked the check button")
   const userAnswer = document.getElementById("answerInput").value;
@@ -71,11 +84,17 @@ checkBtn.addEventListener("click", () => {
         console.log("Correct answer!");
         score++;
         console.log("The score is now " + score);
+        var nextQuestion = i + 1;
+        console.log("The index for next question is now " + nextQuestion);
+        if (nextQuestion >= cardsData.length) {
+          nextQuestion = 0; // Loop back to the first card
+        }
+        document.getElementById( "question" ).innerHTML = cardsData[nextQuestion].question;
       
       } 
 
     }
-    
+
   }
 
   });
