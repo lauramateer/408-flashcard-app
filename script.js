@@ -1,12 +1,6 @@
-
-var score = 0;
-
-
+const cardsContainer = document.getElementById("cards-container");
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
-const checkBtn = document.getElementById("check-match");
-
-
 const currentEl = document.getElementById("current");
 const showBtn = document.getElementById("show");
 const hideBtn = document.getElementById("hide");
@@ -16,99 +10,21 @@ const addCardBtn = document.getElementById("add-card");
 const clearBtn = document.getElementById("clear");
 const addContainer = document.getElementById("add-container");
 
-
-// Keep track of current card
+//current
 let currentActiveCard = 0;
 
 
-function generate(index){
-
-
-  document.getElementById( "answerInput" ).innerHTML = cardsData[index].answer;
-}
-
-
-
-// Store DOM cards
-
-
-// Store card data
-//const cardsData = getCardsData();
 const cardsEl = [];
-const cardsData = [
-  {
-  question: "What must a variable begin with?",
-   answer: "A letter, $ or _",
-  },
-  {
-   question: "What is a variable?",
-   answer: "Container for a piece of data",
-  },
-  {
-   question: "Example of Case Sensitive Variable",
-   answer: "thisIsAVariable",
-  },
-  ];
 
-nextBtn.addEventListener("click", () => {
-  currentActiveCard++;
-  if (currentActiveCard >= cardsData.length) {
-    currentActiveCard = 0; // Loop back to the first card
-  }
-  generate(currentActiveCard);
-});
-
-prevBtn.addEventListener("click", () => {
-  currentActiveCard--;
-  console.log("index is " + currentActiveCard);
-
-  if (currentActiveCard < 0) {
-    currentActiveCard = cardsData.length -1; // Loop back to the first card
-  }
-  console.log("index being generated is" + currentActiveCard);
-  generate(currentActiveCard);
-});
-
-checkBtn.addEventListener("click", () => {
-  console.log("you clicked the check button")
-  const userAnswer = document.getElementById("answerInput").value;
-  const activeQuestion = document.getElementById("question").value;
-
-  //check if answer in bottom box matches answer in array connected to the top box
-
-  for( var i = 0; i < cardsData.length; i++){
-
-    if(activeQuestion === cardsData[i].question)
-    {
-      if (userAnswer === cardsData[i].answer) {
-        console.log("Correct answer!");
-        score++;
-        console.log("The score is now " + score);
-        var nextQuestion = i + 1;
-        console.log("The index for next question is now " + nextQuestion);
-        if (nextQuestion >= cardsData.length) {
-          nextQuestion = 0; // Loop back to the first card
-        }
-        document.getElementById( "question" ).innerHTML = cardsData[nextQuestion].question;
-      
-      } 
-
-    }
-
-  }
-
-  });
+//data
+const cardsData = getCardsData();
 
 
 
-
-
-// Create all cards
+//to create the cards
 function createCards() {
   cardsData.forEach((data, index) => createCard(data, index));
 }
-
-// Create a single card in DOM
 function createCard(data, index) {
   const card = document.createElement("div");
   card.classList.add("card");
@@ -129,28 +45,26 @@ function createCard(data, index) {
       </div>
   `;
 
+  card.addEventListener("click", () => card.classList.toggle("show-answer"));
 
-
-  // Add to DOM cards
   cardsEl.push(card);
 
- 
+  cardsContainer.appendChild(card);
 
   updateCurrentText();
 }
 
-// Show number of cards
+//number out of number to show card amount
 function updateCurrentText() {
   currentEl.innerText = `${currentActiveCard + 1}/${cardsEl.length}`;
 }
 
-// Get cards from local storage
+//local storage
 function getCardsData() {
   const cards = JSON.parse(localStorage.getItem("cards"));
   return cards === null ? [] : cards;
 }
 
-// Add card to local storage
 function setCardsData(cards) {
   localStorage.setItem("cards", JSON.stringify(cards));
   window.location.reload();
@@ -159,8 +73,22 @@ function setCardsData(cards) {
 createCards();
 
 
+//next
+nextBtn.addEventListener("click", () => {
+  cardsEl[currentActiveCard].className = "card left";
 
-// Previous button
+  currentActiveCard = currentActiveCard + 1;
+
+  if (currentActiveCard > cardsEl.length - 1) {
+    currentActiveCard = cardsEl.length - 1;
+  }
+
+  cardsEl[currentActiveCard].className = "card active";
+
+  updateCurrentText();
+});
+
+//before
 prevBtn.addEventListener("click", () => {
   cardsEl[currentActiveCard].className = "card right";
 
@@ -175,13 +103,11 @@ prevBtn.addEventListener("click", () => {
   updateCurrentText();
 });
 
-// Show add container
 showBtn.addEventListener("click", () => addContainer.classList.add("show"));
 
-// Hide add container
 hideBtn.addEventListener("click", () => addContainer.classList.remove("show"));
 
-// Add new card
+//new card
 addCardBtn.addEventListener("click", () => {
   const question = questionEl.value;
   const answer = answerEl.value;
@@ -201,9 +127,10 @@ addCardBtn.addEventListener("click", () => {
   }
 });
 
-// Clear cards button
+//clear 
 clearBtn.addEventListener("click", () => {
   localStorage.clear();
 
+  cardsContainer.innerHTML = "";
   window.location.reload();
 });
