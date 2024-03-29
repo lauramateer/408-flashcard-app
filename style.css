@@ -16,6 +16,7 @@ body {
   margin: 0;
   padding: 0;
   color: rgb(255, 255, 255);
+  background-color: #cec2b1;
 }
 
 h1 {
@@ -76,6 +77,16 @@ h1 button {
   max-width: 100%;
 }
 
+.answers {
+  perspective: 1000px;
+  position: relative;
+  height: 300px;
+  width: 500px;
+  max-width: 100%;
+ 
+  
+}
+
 .card {
   position: absolute;
   opacity: 0;
@@ -87,10 +98,31 @@ h1 button {
   transform: translateX(50%) rotateY(-10deg);
   transition: transform 0.4 ease, opacity 0.4s ease;
 }
+.answer {
+  position: absolute;
+  opacity: 0;
+  font-size: 1.5em;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  transform: translateX(50%) rotateY(-10deg);
+  transition: transform 0.4 ease, opacity 0.4s ease;
+}
+
+
+#show {
+
+}
+
 
 .card.active {
   opacity: 1;
-  cursor: pointer;
+  z-index: 100;
+  transform: translateX(0) rotateY(0deg);
+}
+.answer.active {
+  opacity: 1;
   z-index: 100;
   transform: translateX(0) rotateY(0deg);
 }
@@ -98,6 +130,10 @@ h1 button {
 .card.left {
   transform: translateX(-50%) rotateY(10deg);
 }
+.answer.left {
+  transform: translateX(-50%) rotateY(10deg);
+}
+
 
 .inner-card {
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
@@ -105,17 +141,14 @@ h1 button {
   height: 100%;
   width: 100%;
   position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.4s ease;
 }
 
 .card.show-answer .inner-card {
   transform: rotateX(180deg);
 }
 
-.inner-card-front,
-.inner-card-back {
-  backface-visibility: hidden;
+.inner-card-front {
+  
   position: absolute;
   top: 0;
   left: 0;
@@ -127,17 +160,29 @@ h1 button {
   background: #000000;
 }
 
-.inner-card-front::after,
-.inner-card-back::after {
-  content: "Click";
-  font-family: "Font Awesome 5 Free", Lato, sans-serif;
+.inner-card-back {
+
   position: absolute;
-  top: 10px;
-  right: 10px;
-  font-weight: bold;
-  font-size: 16px;
-  color: #ffffff;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  color:#000000;
+  background-color: #ffffff;
+
+ 
 }
+
+.inner-card-back p {
+  transform: rotateX(180deg);
+ }
+
+
+
+
 
 .inner-card-front {
   transform: rotateX(0deg);
@@ -164,6 +209,10 @@ h1 button {
   margin: 0 25px;
   color: black;
 
+}
+
+#output {
+  margin-top: 20px;
 }
 
 .add-container {

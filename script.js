@@ -1,6 +1,9 @@
 const cardsContainer = document.getElementById("cards-container");
+const cardsAnswers = document.getElementById("cards-answers");
+
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
+
 const currentEl = document.getElementById("current");
 const showBtn = document.getElementById("show");
 const hideBtn = document.getElementById("hide");
@@ -10,27 +13,37 @@ const addCardBtn = document.getElementById("add-card");
 const clearBtn = document.getElementById("clear");
 const addContainer = document.getElementById("add-container");
 
+const checkBtn = document.getElementById("test");
+var score = 0;
+
 //current
+let currentActiveAnswer = 0;
 let currentActiveCard = 0;
 
 
 const cardsEl = [];
+const answersEl = [];
 
 //data
 const cardsData = getCardsData();
+const answersData = getCardsData();
 
 
 
 //to create the cards
 function createCards() {
   cardsData.forEach((data, index) => createCard(data, index));
+  
 }
 function createCard(data, index) {
   const card = document.createElement("div");
   card.classList.add("card");
+  const answer = document.createElement("div");
+  answer.classList.add("answer");
 
   if (index === 0) {
     card.classList.add("active");
+    answer.classList.add("active");
   }
 
   card.innerHTML = `
@@ -38,6 +51,14 @@ function createCard(data, index) {
           <div class="inner-card-front">
             <p>${data.question}</p>
           </div>
+        </div>
+      </div>
+  `;
+
+
+
+  answer.innerHTML = `
+    <div class="inner-card">
           <div class="inner-card-back">
             <p>${data.answer}</p>
           </div>
@@ -45,11 +66,13 @@ function createCard(data, index) {
       </div>
   `;
 
-  card.addEventListener("click", () => card.classList.toggle("show-answer"));
+ 
 
   cardsEl.push(card);
+  answersEl.push(answer);
 
   cardsContainer.appendChild(card);
+  cardsAnswers.appendChild(answer);
 
   updateCurrentText();
 }
@@ -73,35 +96,91 @@ function setCardsData(cards) {
 createCards();
 
 
+
 //next
 nextBtn.addEventListener("click", () => {
-  cardsEl[currentActiveCard].className = "card left";
+  answersEl[currentActiveAnswer].className = "answer left";
 
-  currentActiveCard = currentActiveCard + 1;
+  currentActiveAnswer = currentActiveAnswer + 1;
 
-  if (currentActiveCard > cardsEl.length - 1) {
-    currentActiveCard = cardsEl.length - 1;
+  if (currentActiveAnswer > answersEl.length - 1) {
+    currentActiveAnswer = 0;
   }
 
-  cardsEl[currentActiveCard].className = "card active";
+  answersEl[currentActiveAnswer].className = "answer active";
 
-  updateCurrentText();
+
 });
+
+
 
 //before
 prevBtn.addEventListener("click", () => {
-  cardsEl[currentActiveCard].className = "card right";
+  answersEl[currentActiveAnswer].className = "answer right";
 
-  currentActiveCard = currentActiveCard - 1;
+  currentActiveAnswer = currentActiveAnswer - 1;
 
-  if (currentActiveCard < 0) {
-    currentActiveCard = 0;
+  if (currentActiveAnswer < 0) {
+    currentActiveAnswer = answersEl.length-1;
   }
 
-  cardsEl[currentActiveCard].className = "card active";
+  answersEl[currentActiveAnswer].className = "answer active";
 
-  updateCurrentText();
+  
 });
+
+
+checkBtn.addEventListener("click", () => {
+  console.log("you clicked the check button")
+ 
+
+  const activeQuestion = cardsEl[currentActiveCard].querySelector('.inner-card-front p');
+  console.log(activeQuestion.textContent);
+
+  const activeAnswer = answersEl[currentActiveAnswer].querySelector('.inner-card-back p');
+  console.log(activeAnswer.textContent);
+
+
+  //check if answer in bottom box matches answer in array connected to the top box
+
+  
+  for( var i = 0; i < answersEl.length; i++){
+   
+
+    if(activeQuestion === cardsEl[i].querySelector('.inner-card-front p'))
+    {
+      if (activeAnswer === answersEl[i].querySelector('.inner-card-back p')) {
+        console.log("Correct answer!");
+        document.getElementById( "output" ).innerHTML = "Correct!";
+        score++;
+        console.log("The score is now " + score);
+
+
+        cardsEl[currentActiveCard].className = "answer left";
+
+
+        currentActiveCard = currentActiveCard + 1;
+        console.log("The index for next question is now " + currentActiveCard);
+        if (currentActiveCard >= cardsData.length) {
+          currentActiveCard = 0; // Loop back to the first card
+        }
+
+        cardsEl[currentActiveCard].className = "answer active";
+        updateCurrentText();
+
+      }
+      else {
+          console.log("Try again");
+          document.getElementById( "output" ).innerHTML = "Try again";
+      }
+
+    }
+
+  }
+
+  });
+
+ 
 
 showBtn.addEventListener("click", () => addContainer.classList.add("show"));
 
@@ -125,6 +204,9 @@ addCardBtn.addEventListener("click", () => {
     cardsData.push(newCard);
     setCardsData(cardsData);
   }
+
+
+
 });
 
 //clear 
@@ -132,5 +214,6 @@ clearBtn.addEventListener("click", () => {
   localStorage.clear();
 
   cardsContainer.innerHTML = "";
+  cardsAnswers.innerHTML = "";
   window.location.reload();
 });
