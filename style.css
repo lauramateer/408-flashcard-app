@@ -39,6 +39,13 @@ h1 button {
     z-index: 2;
   }
 }
+
+.direc {
+  color: black;
+  position: left;
+  left: 30px;
+  padding: 10px;
+}
 .btn {
   cursor: pointer;
   background-color: #ffffff;
