@@ -101,16 +101,17 @@ createCards();
 nextBtn.addEventListener("click", () => {
   answersEl[currentActiveAnswer].className = "answer left";
 
-  currentActiveAnswer = currentActiveAnswer + 1;
+  let randomIndex = Math.floor(Math.random() * answersEl.length);
 
-  if (currentActiveAnswer > answersEl.length - 1) {
-    currentActiveAnswer = 0;
+  while (randomIndex === currentActiveAnswer) {
+      randomIndex = Math.floor(Math.random() * answersEl.length);
   }
 
+  currentActiveAnswer = randomIndex;
+
   answersEl[currentActiveAnswer].className = "answer active";
-
-
 });
+
 
 
 
